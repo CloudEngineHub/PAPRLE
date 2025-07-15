@@ -119,9 +119,9 @@ class ROS2Env(BaseEnv):
         # Initialize camera reader if available
         self.camera_reader = None
         if robot.camera_config is not None:
-            from paprle.camera.realsense_reader import RealSenseReader
-            self.camera_reader = RealSenseReader(robot.camera_config)
-            print("[Env] Camera reader started")
+            from paprle.camera import CAMERA_DICT
+            self.camera_reader = CAMERA_DICT[robot.camera_type](robot.camera_config)
+            print(f"[Env] Camera reader {robot.camera_type} started")
 
         self.render_mode = render_mode
         self.view_im = None
@@ -130,7 +130,6 @@ class ROS2Env(BaseEnv):
             self.render_thread = Thread(target=self.render)
             self.render_thread.start()
             self.threads.append(self.render_thread)
-
 
     def setup_get_move_group_params(self, get_parameters='/move_group/get_parameters'):
         self.get_param_cli = self.moveit_node.create_client(GetParameters, get_parameters)

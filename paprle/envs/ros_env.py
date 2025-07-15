@@ -89,7 +89,7 @@ class ROSEnv(BaseEnv):
         self.last_command, self.lp_filter_alpha = None, self.robot.ros1_config.lp_filter_alpha
         self.last_vel, self.dt = None, self.robot.control_dt
         if robot.name == 'g1':
-            from paprle.envs.ros1_env_utils.g1_subscribe_and_publish import ControllerPublisher as G1ControllerPublisher
+            from paprle.envs.ros_env_utils.g1_subscribe_and_publish import ControllerPublisher as G1ControllerPublisher
             self.controller_publisher = G1ControllerPublisher(topics_to_pub, robot.joint_names,
                                                               self.state_subscriber.states)
         else:
@@ -99,9 +99,9 @@ class ROSEnv(BaseEnv):
         # Initialize camera reader if available
         self.camera_reader = None
         if robot.camera_config is not None:
-            from paprle.camera.realsense_reader import RealSenseReader
-            self.camera_reader = RealSenseReader(robot.camera_config)
-            print("[Env] Camera reader started")
+            from paprle.camera import CAMERA_DICT
+            self.camera_reader = CAMERA_DICT[robot.camera_type](robot.camera_config)
+            print(f"[Env] Camera reader {robot.camera_type} started")
 
         self.render_mode = render_mode
         self.view_im = None

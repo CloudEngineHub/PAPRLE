@@ -7,6 +7,9 @@ class Robot:
         self.ik_config = getattr(follower_config, 'ik_cfg', None)
         self.ros2_config = getattr(follower_config, 'ros2_cfg', None)
         self.camera_config = getattr(follower_config, 'camera_cfg', None)
+        if self.camera_config is not None:
+            camera_type = getattr(follower_config, 'camera_type', 'realsense')
+            self.camera_type = camera_type
 
         self.name = self.robot_config.name
 
